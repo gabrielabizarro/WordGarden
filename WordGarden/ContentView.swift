@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    private static let maximumGuesses = 8 // Need to refer to this as Self.maximumGuesses
+    
     @State private var wordsGuessed = 0
     @State private var wordsMissed = 0
     @State private var gameStatusMessage = "How Many Guesses to Uncover the hIdden Word?"
@@ -15,11 +17,11 @@ struct ContentView: View {
     @State private var wordToGuess = ""
     @State private var revealedWord = ""
     @State private var lettersGuessed = ""
+    @State private var guessesRemaining = maximumGuesses
     @State private var guessedLetter = ""
     @State private var imageName = "flower8"
     @State private var playAgainHidden = true
     @FocusState private var textFieldIsFocused: Bool
-
     private let wordsToGuess = ["GABRIELA", "DOG", "CAT"] // All Caps!
     var body: some View {
         VStack {
@@ -74,10 +76,12 @@ struct ContentView: View {
                                 return
                             }
                             guessALetter()
+                            updateGamePlay()
                         }
                     
                     Button("Guess a Letter:"){
                         guessALetter()
+                        updateGamePlay()
                     }
                     .buttonStyle(.bordered)
                     .tint(.mint)
@@ -109,8 +113,17 @@ struct ContentView: View {
         revealedWord = wordToGuess.map{ letter in
             lettersGuessed.contains(letter) ? "\(letter)" : "_"
         }.joined(separator: " ")
+    }
+    
+    func updateGamePlay() {
+        //TODO: Redi with with LocalizedStringKey and Inflect
+        gameStatusMessage = "You've Made \(lettersGuessed.count) Guess\(lettersGuessed.count == 1 ? "" : "es")"
+        if !wordToGuess.contains(guessedLetter){
+            //ended here at 7:23
+        }
         guessedLetter = ""
     }
+    
 }
 
 #Preview {
